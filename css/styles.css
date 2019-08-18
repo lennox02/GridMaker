@@ -72,21 +72,38 @@ body {
     z-index: 100;
 }
 
-#gm-save-box {
+
+
+.gm-button-box {
 	background-color: white;
 	font-size: 24px;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-weight: bold;
 	padding: 6px 12px 6px 12px;
-	z-index: 1000;
+	border-radius: 10px;
+	display: block;
+	float: left;
+}
+
+.gm-button-box:hover {
+	background-color: #f1f1f1;
+	cursor: pointer;
+}
+
+.gm-button-container {
 	position: fixed;
 	bottom: 50px;
 	left: 50%;
-	border: 5px solid RoyalBlue;
-	border-radius: 10px;
+	z-index: 1000;
+	width: 254px;
+	margin-left: -127px;
 }
 
-#gm-save-box:hover {
-	background-color: #f1f1f1;
-	cursor: pointer;
+#gm-add-box {
+	border: 5px solid Coral;
+}
+
+#gm-save-box {
+	border: 5px solid RoyalBlue;
+	margin-left: 15px;
 }

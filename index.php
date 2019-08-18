@@ -16,7 +16,10 @@
 
     <div class="gm-container">
 
-        <div id="gm-save-box">Save</div>
+        <div class="gm-button-container">
+            <div class="gm-button-box" id="gm-add-box">Add Table</div>
+            <div class="gm-button-box" id="gm-save-box">Save</div>
+        </div>
 
     </div>
 
@@ -82,6 +85,7 @@ var ySide = 0;
 var xSide = 0;
 
 var positions = [];
+var ids = [];
 
 
 function angleCalc(ax, ay) {
@@ -94,12 +98,55 @@ function angleCalc(ax, ay) {
 
 $('.gm-grid-circle').click(function(){
 
+    //verify there was a previous point and that it does not match the currently clicked point
     if(lastClicked !== null && ((lastClicked.top !== $(this).offset().top) || (lastClicked.left !== $(this).offset().left))){
+
+        console.log(positions.length);
+
+        if(positions.length >= 1){
+            console.log('hi1');
+
+            lastlastClicked = positions[lineCount-2];
+
+            //if the two last points make a straight line with the current point, remove the last point
+            if(
+                (
+                    lastClicked.top === $(this).offset().top &&
+                    lastlastClicked.top === $(this).offset().top
+                )
+                ||
+                (
+                    lastClicked.left === $(this).offset().left
+                    && lastlastClicked.left === $(this).offset().left
+                )
+            ){
+
+                $("#" + ids[lineCount-2]).toggleClass("point");
+
+                //remove highlighted node styling
+                let top = parseInt($("#" + ids[lineCount-2]).css('top')) + 3;
+                let left = parseInt($("#" + ids[lineCount-2]).css('left')) + 3;
+                $("#" + ids[lineCount-2]).css({
+                    "height":"12px",
+                    "width":"12px",
+                    "background-color":"#ccc",
+                    "top":top + "px",
+                    "left":left + "px"
+                });
+
+                $("#line" + (lineCount-1)).remove();
+                lastClicked = positions[lineCount-2];
+                lineCount--;
+                positions.pop();
+                ids.pop();
+
+            }
+
+        }
 
         if(!$(this).hasClass("point")){
             $(this).toggleClass("point");
         }
-
 
         //get xy values from left/top.  Last clicked left/top are conisdered x,y 0,0
         xAngle = $(this).offset().left - lastClicked.left;
@@ -131,6 +178,7 @@ $('.gm-grid-circle').click(function(){
         $("#line" + lineCount).css({'transform' : 'rotate('+ degrees +'deg)', 'transform-origin' : '0% 50%'});
         lineCount++;
         positions.push(lastClicked);
+        ids.push($(this).attr('id'));
         lastClicked = $(this).offset();
 
     //first click
@@ -147,6 +195,8 @@ $('.gm-grid-circle').click(function(){
         $("#line" + (lineCount-1)).remove();
         lastClicked = positions[lineCount-2];
         lineCount--;
+        positions.pop();
+        ids.pop();
     }
 });
 
